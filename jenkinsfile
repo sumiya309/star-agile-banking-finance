@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Clone the correct Git repository
-                git 'https://github.com/faizan32419/star-agile-banking-finance.git'
+                git 'https://github.com/sumiya309/star-agile-banking-finance.git'
             }
         }
 
@@ -43,3 +43,4 @@ pipeline {
                 sh 'docker push shaikfaizu990/banking-project-demo:1.0'
             }
         }
+}
