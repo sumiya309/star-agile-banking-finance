@@ -2,46 +2,24 @@ pipeline {
     agent any
 
     tools {
-        // Use the Maven version configured as M2_HOME
+        // Install the Maven version configured as "M3" and add it to the path.
         maven "M2_HOME"
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                // Clone the correct Git repository
-                git 'https://github.com/sumiya309/star-agile-banking-finance.git'
-            }
-        }
-
         stage('Build') {
             steps {
-                // Run Maven with test failures ignored
+                // Get some code from a GitHub repository
+                git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+
+                // Run Maven on a Unix agent.
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
-        }
 
-        stage('Docker-Login') {
-            steps {
-                // Log in to Docker Hub before building the image
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-pwd', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_LOGIN')]) {
-                    sh 'docker login -u "$DOCKER_LOGIN" -p "$DOCKER_PASSWORD"'
-                }
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
-        }
 
-        stage('Create Docker Image') {
-            steps {
-                // Build Docker image
-                sh 'docker build -t shaikfaizu990/banking-project-demo:1.0 .'
-            }
+            
         }
-
-        stage('Push-Image') {
-            steps {
-                // Push Docker image to Docker Hub
-                sh 'docker push shaikfaizu990/banking-project-demo:1.0'
-            }
-        }
-}
+    }
 }
