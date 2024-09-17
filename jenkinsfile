@@ -27,5 +27,19 @@ pipeline {
                 sh 'docker build -t sumiyag30/banking-finance:1.0 .'
                    }
              }    
+       stage('Docker-Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-pwd', passwordVariable: 'dockerpassword', usernameVariable: 'dockerlogin')]) {
+                  sh 'docker login -u ${dockerhub-pwd} -p ${dockerpassword}'
+                      }
+                }
+              }
+        stage('Push-Image') {
+             steps {
+                sh 'docker push sumiyag30/banking-finance:1.0'
+                          }
+                    }
+
+}
     }
 }
