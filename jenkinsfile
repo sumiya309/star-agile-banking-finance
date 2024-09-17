@@ -39,7 +39,17 @@ pipeline {
                 sh 'docker push sumiyag30/banking-finance:1.0'
                           }
                     }
-
+        stage ('Config & Deployment') {
+            withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AwsAcessKey', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+            dir('terraform-files') {
+            sh 'sudo chmod 600 jenkins-sum.pem'
+            sh 'terraform init'
+            sh 'terraform validate'
+            sh 'terraform apply --auto-approve'
+                  }
+                     }
+                    }
+}
  }
 }
 
