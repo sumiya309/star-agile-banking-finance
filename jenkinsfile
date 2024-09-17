@@ -27,17 +27,11 @@ pipeline {
                 sh 'docker build -t sumiyag30/banking-finance:1.0 .'
                    }
              }    
-       //stage('Docker-Login') {
-         //   steps {
-           //     withCredentials([usernamePassword(credentialsId: 'Docker-login1', passwordVariable: 'dockerpassword', usernameVariable: 'dockerlogin')]) {
-             //     sh 'docker login -u ${Docker-login1} -p ${dockerpassword}'
-           stage('Docker-Login') {
-    steps {
-        withCredentials([usernamePassword(credentialsId: 'Docker-login1', passwordVariable: 'dockerpassword', usernameVariable: 'dockerlogin')]) {
-            sh """
-            echo ${dockerpassword} | docker login -u ${dockerlogin} --password-stdin
-            """    
-                  }
+       stage('Docker-Login') {
+            steps {
+               withCredentials([usernamePassword(credentialsId: 'docker_login', passwordVariable: 'dockerpassword', usernameVariable: 'dockerlogin')]) {
+                  sh 'docker login -u ${docker_login} -p ${dockerpassword}'
+                          }
                 }
               }
         stage('Push-Image') {
